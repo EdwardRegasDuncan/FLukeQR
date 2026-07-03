@@ -128,10 +128,6 @@ button:hover{
         Ready to scan
     </div>
 
-    <button id="resetBtn" class="hidden">
-        Scan Next Guest
-    </button>
-
 </div>
 
 <script>
@@ -141,7 +137,6 @@ const EXPECTED_CODE = "MY_SECRET_QR_2026";
 let scanLocked = false;
 
 const status = document.getElementById("status");
-const resetBtn = document.getElementById("resetBtn");
 
 const scanner = new Html5QrcodeScanner(
     "reader",
@@ -175,33 +170,28 @@ function onScanSuccess(decodedText){
 
         status.className = "status valid";
         status.innerHTML = "✅ Welcome!";
-
         flashScreen("flash-green");
 
-    }else{
+    } else {
 
         status.className = "status invalid";
         status.innerHTML = "❌ Invalid QR";
-
         flashScreen("flash-red");
+
     }
 
-    resetBtn.classList.remove("hidden");
+    // Automatically reset after 1 second
+    setTimeout(() => {
 
+        status.className = "status";
+        status.innerHTML = "Ready to scan";
+
+        scanLocked = false;
+
+    }, 1000);
 }
 
 scanner.render(onScanSuccess);
-
-resetBtn.addEventListener("click",()=>{
-
-    scanLocked=false;
-
-    status.className="status";
-    status.innerHTML="Ready to scan";
-
-    resetBtn.classList.add("hidden");
-
-});
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
