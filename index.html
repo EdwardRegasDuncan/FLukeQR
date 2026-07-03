@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Party Check-In</title>
+<title>FLuke QR reader</title>
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2563eb">
@@ -112,6 +112,17 @@ button:hover{
     background:#ef4444 !important;
 }
 
+.logo{
+    display:flex;
+    justify-content:center;
+    margin-bottom:15px;
+}
+
+.logo img{
+    width:100px;
+    height:auto;
+}
+
 </style>
 
 </head>
@@ -119,8 +130,11 @@ button:hover{
 <body>
 
 <div class="container">
+    <div class="logo">
+        <img src="FLukeLogo.png" alt="FLuke Logo">
+    </div>
 
-    <h1>🎉 Party Check-In</h1>
+    <h1>QR reader</h1>
 
     <div id="reader"></div>
 
