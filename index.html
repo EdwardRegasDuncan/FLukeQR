@@ -20,30 +20,57 @@
 
 <h1 id="status">Waiting...</h1>
 
+<div id="reader"></div>
+
+<h1 id="status">Ready to scan</h1>
+
+<button id="resetBtn" style="display:none;">
+    Scan Next Guest
+</button>
+
 <script>
 const EXPECTED_CODE = "MY_SECRET_QR_2026";
 
-const scanner = new Html5QrcodeScanner(
+let scanner;
+let scanLocked = false;
+
+const status = document.getElementById("status");
+const resetBtn = document.getElementById("resetBtn");
+
+function onScanSuccess(decodedText) {
+
+    if (scanLocked) return;
+    scanLocked = true;
+
+    if (decodedText === EXPECTED_CODE) {
+        status.textContent = "✅ Welcome!";
+        status.style.color = "green";
+    } else {
+        status.textContent = "❌ Invalid";
+        status.style.color = "red";
+        navigator.vibrate(100);
+    }
+
+    setTimeout(() => {
+        status.textContent = "Ready to scan";
+        status.style.color = "black";
+        scanLocked = false;
+    }, 1000);
+}
+
+scanner = new Html5QrcodeScanner(
     "reader",
     { fps: 10, qrbox: 250 }
 );
 
-function onScanSuccess(decodedText) {
-
-    scanner.clear();
-
-    const status = document.getElementById("status");
-
-    if (decodedText === EXPECTED_CODE) {
-        status.innerHTML = "✅ Correct QR Code";
-        status.style.color = "green";
-    } else {
-        status.innerHTML = "❌ Incorrect QR Code";
-        status.style.color = "red";
-    }
-}
-
 scanner.render(onScanSuccess);
+
+resetBtn.addEventListener("click", () => {
+    scanLocked = false;
+    status.textContent = "Ready to scan";
+    status.style.color = "black";
+    resetBtn.style.display = "none";
+});
 </script>
 
 </body>
