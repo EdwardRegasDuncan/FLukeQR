@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Verifier</title>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d6efd">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+    }
+</script>
+<body>
+
+<h2>Scan QR Code</h2>
+
+<div id="reader" style="width:300px;"></div>
+
+<h1 id="status">Waiting...</h1>
+
+<script>
+const EXPECTED_CODE = "MY_SECRET_QR_2026";
+
+const scanner = new Html5QrcodeScanner(
+    "reader",
+    { fps: 10, qrbox: 250 }
+);
+
+function onScanSuccess(decodedText) {
+
+    scanner.clear();
+
+    const status = document.getElementById("status");
+
+    if (decodedText === EXPECTED_CODE) {
+        status.innerHTML = "✅ Correct QR Code";
+        status.style.color = "green";
+    } else {
+        status.innerHTML = "❌ Incorrect QR Code";
+        status.style.color = "red";
+    }
+}
+
+scanner.render(onScanSuccess);
+</script>
+
+</body>
+</html>
